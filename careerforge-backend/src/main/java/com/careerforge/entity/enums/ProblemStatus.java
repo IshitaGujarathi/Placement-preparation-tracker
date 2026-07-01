@@ -1,5 +1,7 @@
 package com.careerforge.entity.enums;
 
-public class ProblemStatus {
-    
+public enum ProblemStatus {
+    NOT_STARTED,
+    IN_PROGRESS,
+    COMPLETED
 }
