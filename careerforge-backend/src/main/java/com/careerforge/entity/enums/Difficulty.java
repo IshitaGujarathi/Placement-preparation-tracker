@@ -1,5 +1,7 @@
 package com.careerforge.entity.enums;
 
-public class Difficulty {
-    
+public enum Difficulty {
+    EASY,
+    MEDIUM,
+    HARD
 }
