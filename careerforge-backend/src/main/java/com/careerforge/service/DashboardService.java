@@ -1,5 +1,7 @@
 package com.careerforge.service;
 
-public class DashboardService {
-    
+import java.util.Map;
+
+public interface DashboardService {
+    Map<String, Object> getDashboardData();
 }

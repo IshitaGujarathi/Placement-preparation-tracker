@@ -1,5 +1,7 @@
 package com.careerforge.service;
 
-public class AiService {
-    
+public interface AiService {
+
+    String askAI(String message);
+
 }

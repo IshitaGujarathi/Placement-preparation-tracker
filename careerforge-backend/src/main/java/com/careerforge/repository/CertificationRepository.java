@@ -1,5 +1,8 @@
 package com.careerforge.repository;
 
-public class CertificationRepository {
-    
+import com.careerforge.entity.Certification;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CertificationRepository extends JpaRepository<Certification, Long> {
+
 }

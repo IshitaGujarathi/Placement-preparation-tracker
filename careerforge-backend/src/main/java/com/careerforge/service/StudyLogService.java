@@ -1,5 +1,9 @@
 package com.careerforge.service;
 
-public class StudyLogService {
-    
+import com.careerforge.entity.StudyLog;
+import java.util.List;
+
+public interface StudyLogService {
+    StudyLog add(StudyLog log);
+    List<StudyLog> getAll();
 }

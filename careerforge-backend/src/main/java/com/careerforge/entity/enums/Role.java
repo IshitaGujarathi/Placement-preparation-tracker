@@ -1,6 +1,6 @@
 package com.careerforge.entity.enums;
 
 public enum Role {
-    USER,
+    STUDENT,
     ADMIN
 }

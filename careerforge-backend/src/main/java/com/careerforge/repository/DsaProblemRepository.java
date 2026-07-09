@@ -1,5 +1,8 @@
 package com.careerforge.repository;
 
-public class DsaProblemRepository {
-    
+import com.careerforge.entity.DsaProblem;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DsaProblemRepository extends JpaRepository<DsaProblem, Long> {
+
 }

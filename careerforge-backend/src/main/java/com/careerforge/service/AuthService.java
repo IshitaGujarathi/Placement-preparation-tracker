@@ -1,5 +1,10 @@
 package com.careerforge.service;
 
-public class AuthService {
-    
+import com.careerforge.dto.AuthResponse;
+import com.careerforge.dto.LoginRequest;
+
+public interface AuthService {
+
+    AuthResponse login(LoginRequest request);
+
 }
