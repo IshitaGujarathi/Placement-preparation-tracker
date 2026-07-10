@@ -1,119 +1,350 @@
-import { useEffect, useState } from "react";
-import dashboardService from "../services/dashboardService";
-
 import {
-    Box,
-    Card,
-    CardContent,
-    Grid,
-    Typography
+  Box,
+  Grid,
+  Paper,
+  Typography,
 } from "@mui/material";
+
+import FolderIcon from "@mui/icons-material/Folder";
+import CodeIcon from "@mui/icons-material/Code";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import WorkIcon from "@mui/icons-material/Work";
+import CountUp from "react-countup";
+
+
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import projectService from "../services/projectService";
+import dsaService from "../services/dsaService";
+import interviewService from "../services/interviewService";
+import certificationService from "../services/certificationService";
+import studyLogService from "../services/studyLogService";
+import ProgressCharts from "../components/dashboard/ProgressCharts";
 
 export default function Dashboard() {
 
-    const [data, setData] = useState({
+  const navigate = useNavigate();
 
-        totalProjects: 0,
+  const [projects, setProjects] = useState([]);
+  const [dsa, setDsa] = useState([]);
+  const [interviews, setInterviews] = useState([]);
+  const [certifications, setCertifications] = useState([]);
+  const [studyLogs, setStudyLogs] = useState([]);
 
-        totalDsa: 0
+  useEffect(() => {
 
-    });
+    loadDashboard();
 
-    useEffect(() => {
+  }, []);
 
-        loadDashboard();
+  const loadDashboard = async () => {
 
-    }, []);
+    try {
 
-    const loadDashboard = async () => {
+      const projectRes = await projectService.getAll();
+      const dsaRes = await dsaService.getAll();
+      const interviewRes = await interviewService.getAll();
+      const certificationRes = await certificationService.getAll();
+      const studyLogRes = await studyLogService.getAll();
 
-        try {
+      setProjects(projectRes.data);
+      setDsa(dsaRes.data);
+      setInterviews(interviewRes.data);
+      setCertifications(certificationRes.data);
+      setStudyLogs(studyLogRes.data);
 
-            const response = await dashboardService.getData();
+    } catch (error) {
 
-            setData(response.data);
+      console.log(error);
 
-        } catch (error) {
+    }
 
-            console.log(error);
+  };
 
-        }
+  const cards = [
 
-    };
+    {
+      title: "Projects",
+      value: projects.length,
+      icon: <FolderIcon sx={{ fontSize: 48 }} />,
+      color: "linear-gradient(135deg,#2563EB,#1D4ED8)",
+      path: "/projects"
+    },
 
-    return (
+    {
+      title: "DSA Solved",
+      value: dsa.length,
+      icon: <CodeIcon sx={{ fontSize: 48 }} />,
+      color: "linear-gradient(135deg,#10B981,#059669)",
+      path: "/dsa"
+    },
 
-        <Box p={4}>
+    {
+      title: "Certificates",
+      value: certifications.length,
+      icon: <EmojiEventsIcon sx={{ fontSize: 48 }} />,
+      color: "linear-gradient(135deg,#8B5CF6,#6D28D9)",
+      path: "/certifications"
+    },
 
-            <Typography
-                variant="h4"
-                mb={4}
+    {
+      title: "Interviews",
+      value: interviews.length,
+      icon: <WorkIcon sx={{ fontSize: 48 }} />,
+      color: "linear-gradient(135deg,#F97316,#EA580C)",
+      path: "/interviews"
+    }
+
+  ];
+
+  return (
+
+    <Box>
+
+      <Typography
+        variant="h3"
+        fontWeight="bold"
+        mb={1}
+      >
+        Welcome Back 👋
+      </Typography>
+
+      <Typography
+        variant="h6"
+        color="text.secondary"
+        mb={4}
+      >
+        Let's continue your placement preparation today.
+      </Typography>
+
+      <Grid container spacing={3}>
+
+        {
+
+          cards.map((card, index) => (
+
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              lg={3}
+              key={index}
             >
 
-                Welcome to CareerForge 🚀
+              <motion.div
 
-            </Typography>
+                initial={{
+                  opacity: 0,
+                  y: 40
+                }}
 
-            <Grid container spacing={3}>
+                animate={{
+                  opacity: 1,
+                  y: 0
+                }}
 
-                <Grid item xs={12} md={6}>
+                transition={{
+                  delay: index * .15
+                }}
 
-                    <Card>
+                whileHover={{
+                  scale: 1.05,
+                  y: -8
+                }}
 
-                        <CardContent>
+              >
 
-                            <Typography variant="h6">
+                <Paper
 
-                                Total Projects
+                  elevation={8}
 
-                            </Typography>
+                  onClick={() => navigate(card.path)}
 
-                            <Typography
-                                variant="h3"
-                                color="primary"
-                            >
+                  sx={{
 
-                                {data.totalProjects}
+                    p: 3,
 
-                            </Typography>
+                    borderRadius: 5,
 
-                        </CardContent>
+                    cursor: "pointer",
 
-                    </Card>
+                    color: "white",
 
-                </Grid>
+                    background: card.color,
 
-                <Grid item xs={12} md={6}>
+                    transition: ".4s",
 
-                    <Card>
+                    "&:hover": {
 
-                        <CardContent>
+                      boxShadow:
+                        "0px 20px 40px rgba(0,0,0,.25)"
 
-                            <Typography variant="h6">
+                    }
 
-                                Total DSA Problems
+                  }}
 
-                            </Typography>
+                >
 
-                            <Typography
-                                variant="h3"
-                                color="success.main"
-                            >
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
 
-                                {data.totalDsa}
+                    {card.icon}
+                  <Typography
+                      variant="h3"
+                      fontWeight="bold"
+                    >
+                    {card.value}
+                   
 
-                            </Typography>
+                </Typography>
 
-                        </CardContent>
+                  </Box>
 
-                    </Card>
+                  <Typography
+                    variant="h6"
+                    mt={3}
+                    fontWeight="bold"
+                  >
+                    {card.title}
+                  </Typography>
 
-                </Grid>
+                </Paper>
+
+              </motion.div>
 
             </Grid>
 
-        </Box>
+          ))
 
-    );
+        }
+
+      </Grid>
+            <Paper
+        elevation={4}
+        sx={{
+          mt: 5,
+          p: 4,
+          borderRadius: 5,
+          bgcolor: "background.paper"
+        }}
+      >
+
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          mb={3}
+        >
+          🚀 Placement Readiness
+        </Typography>
+
+        <Grid container spacing={2}>
+
+          <Grid item xs={12} md={6}>
+
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              📁 Projects Completed :
+              <strong> {projects.length}</strong>
+            </Typography>
+
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              💻 DSA Problems Solved :
+              <strong> {dsa.length}</strong>
+            </Typography>
+
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              💼 Interviews Prepared :
+              <strong> {interviews.length}</strong>
+            </Typography>
+
+            <Typography variant="body1">
+              🏆 Certifications :
+              <strong> {certifications.length}</strong>
+            </Typography>
+
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              📖 Study Logs :
+              <strong> {studyLogs.length}</strong>
+            </Typography>
+
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              🤖 AI Assistant :
+              <strong> Ready</strong>
+            </Typography>
+
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              🌙 Theme :
+              <strong> Dynamic</strong>
+            </Typography>
+
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ mt: 2 }}
+            >
+              Keep updating your projects, DSA questions,
+              interviews and certifications to improve your
+              placement readiness.
+            </Typography>
+
+          </Grid>
+
+        </Grid>
+
+      </Paper>
+
+      <Paper
+        elevation={4}
+        sx={{
+          mt: 4,
+          p: 4,
+          borderRadius: 5,
+          bgcolor: "background.paper"
+        }}
+      >
+
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          mb={3}
+        >
+          📌 Quick Summary
+        </Typography>
+
+        <Typography color="text.secondary">
+
+          Total Records :
+          <strong>
+            {" "}
+            {projects.length +
+              dsa.length +
+              interviews.length +
+              certifications.length +
+              studyLogs.length}
+          </strong>
+
+        </Typography>
+
+        <Typography
+          color="text.secondary"
+          mt={2}
+        >
+          Click on any dashboard card above to manage that
+          section.
+        </Typography>
+
+      </Paper>
+
+    </Box>
+
+  );
 
 }

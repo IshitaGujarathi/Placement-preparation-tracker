@@ -22,4 +22,34 @@ public class StudyLogServiceImpl implements StudyLogService {
     public List<StudyLog> getAll() {
         return repository.findAll();
     }
+
+    @Override
+    public StudyLog getById(Long id) {
+
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Study Log not found"));
+
+    }
+
+    @Override
+    public StudyLog update(Long id, StudyLog log) {
+
+        StudyLog existing = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Study Log not found"));
+
+        existing.setSubject(log.getSubject());
+        existing.setHoursStudied(log.getHoursStudied());
+        existing.setStudyDate(log.getStudyDate());
+
+        return repository.save(existing);
+
+    }
+
+    @Override
+    public void delete(Long id) {
+
+        repository.deleteById(id);
+
+    }
+
 }

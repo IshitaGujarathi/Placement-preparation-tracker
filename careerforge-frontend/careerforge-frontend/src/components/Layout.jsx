@@ -2,32 +2,50 @@ import { Box, Toolbar } from "@mui/material";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
-export default function Layout({children}) {
+export default function Layout({
+  children,
+  mode,
+  toggleTheme,
+}) {
 
-    return (
+  return (
 
-        <Box sx={{display:"flex"}}>
+    <Box
+      sx={{
+        display: "flex",
+        bgcolor: "background.default",
+        color: "text.primary",
+        minHeight: "100vh",
+        transition: "0.4s",
+      }}
+    >
 
-            <Navbar/>
+      <Navbar
+        mode={mode}
+        toggleTheme={toggleTheme}
+      />
 
-            <Sidebar/>
+      <Sidebar />
 
-            <Box
-                component="main"
-                sx={{
-                    flexGrow:1,
-                    p:3
-                }}
-            >
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 4,
+          bgcolor: "background.default",
+          transition: "0.4s",
+          minHeight: "100vh",
+        }}
+      >
 
-                <Toolbar/>
+        <Toolbar />
 
-                {children}
+        {children}
 
-            </Box>
+      </Box>
 
-        </Box>
+    </Box>
 
-    );
+  );
 
 }

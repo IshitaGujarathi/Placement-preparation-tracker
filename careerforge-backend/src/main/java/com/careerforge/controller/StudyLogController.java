@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/studylogs")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class StudyLogController {
 
     private final StudyLogService service;
@@ -23,4 +24,25 @@ public class StudyLogController {
     public List<StudyLog> getAll() {
         return service.getAll();
     }
+
+    @GetMapping("/{id}")
+    public StudyLog getById(@PathVariable Long id) {
+        return service.getById(id);
+    }
+
+    @PutMapping("/{id}")
+    public StudyLog update(@PathVariable Long id,
+                           @RequestBody StudyLog log) {
+        return service.update(id, log);
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id) {
+
+        service.delete(id);
+
+        return "Study Log deleted successfully.";
+
+    }
+
 }
