@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
 public class User {
 
     @Id
@@ -51,4 +52,9 @@ public class User {
     public void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    @Column(nullable=false)
+    private String name;
 }
+
+
