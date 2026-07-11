@@ -2,33 +2,22 @@ package com.careerforge.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-
-import java.util.List;
+import org.springframework.web.cors.*;
 
 @Configuration
 public class CorsConfig {
 
     @Bean
-    public CorsFilter corsFilter() {
+    public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173"
-        ));
+        configuration.addAllowedOrigin("https://placement-preparation-tracker-rho.vercel.app");
 
-        configuration.setAllowedMethods(List.of(
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE",
-                "OPTIONS"
-        ));
+        configuration.addAllowedHeader("*");
 
-        configuration.setAllowedHeaders(List.of("*"));
+        configuration.addAllowedMethod("*");
+
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =
@@ -36,6 +25,8 @@ public class CorsConfig {
 
         source.registerCorsConfiguration("/**", configuration);
 
-        return new CorsFilter(source);
+        return source;
+
     }
+
 }
