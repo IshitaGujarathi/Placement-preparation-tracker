@@ -1,11 +1,15 @@
 import axios from "axios";
 
+console.log("API URL:", import.meta.env.VITE_API_URL);
 const axiosConfig = axios.create({
  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
+
+
+
 
 axiosConfig.interceptors.request.use((config) => {
 
@@ -19,3 +23,4 @@ axiosConfig.interceptors.request.use((config) => {
 });
 
 export default axiosConfig;
+
