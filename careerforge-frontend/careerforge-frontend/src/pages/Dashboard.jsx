@@ -3,15 +3,15 @@ import {
   Grid,
   Paper,
   Typography,
-  CircularProgress,
 } from "@mui/material";
 
 import FolderIcon from "@mui/icons-material/Folder";
 import CodeIcon from "@mui/icons-material/Code";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import WorkIcon from "@mui/icons-material/Work";
-
 import CountUp from "react-countup";
+
+
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -21,7 +21,6 @@ import dsaService from "../services/dsaService";
 import interviewService from "../services/interviewService";
 import certificationService from "../services/certificationService";
 import studyLogService from "../services/studyLogService";
-
 import ProgressCharts from "../components/dashboard/ProgressCharts";
 
 export default function Dashboard() {
@@ -33,17 +32,10 @@ export default function Dashboard() {
   const [interviews, setInterviews] = useState([]);
   const [certifications, setCertifications] = useState([]);
   const [studyLogs, setStudyLogs] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
 
     loadDashboard();
-
-    const interval = setInterval(() => {
-      loadDashboard();
-    }, 3000);
-
-    return () => clearInterval(interval);
 
   }, []);
 
@@ -51,21 +43,11 @@ export default function Dashboard() {
 
     try {
 
-      setLoading(true);
-
-      const [
-        projectRes,
-        dsaRes,
-        interviewRes,
-        certificationRes,
-        studyLogRes,
-      ] = await Promise.all([
-        projectService.getAll(),
-        dsaService.getAll(),
-        interviewService.getAll(),
-        certificationService.getAll(),
-        studyLogService.getAll(),
-      ]);
+      const projectRes = await projectService.getAll();
+      const dsaRes = await dsaService.getAll();
+      const interviewRes = await interviewService.getAll();
+      const certificationRes = await certificationService.getAll();
+      const studyLogRes = await studyLogService.getAll();
 
       setProjects(projectRes.data);
       setDsa(dsaRes.data);
@@ -77,33 +59,9 @@ export default function Dashboard() {
 
       console.log(error);
 
-    } finally {
-
-      setLoading(false);
-
     }
 
   };
-
-  const totalRecords =
-    projects.length +
-    dsa.length +
-    interviews.length +
-    certifications.length +
-    studyLogs.length;
-
-  const readiness = Math.min(
-    100,
-    Math.round(
-      (
-        projects.length * 15 +
-        dsa.length * 2 +
-        certifications.length * 8 +
-        interviews.length * 12 +
-        studyLogs.length
-      ) / 5
-    )
-  );
 
   const cards = [
 
@@ -112,7 +70,7 @@ export default function Dashboard() {
       value: projects.length,
       icon: <FolderIcon sx={{ fontSize: 48 }} />,
       color: "linear-gradient(135deg,#2563EB,#1D4ED8)",
-      path: "/projects",
+      path: "/projects"
     },
 
     {
@@ -120,7 +78,7 @@ export default function Dashboard() {
       value: dsa.length,
       icon: <CodeIcon sx={{ fontSize: 48 }} />,
       color: "linear-gradient(135deg,#10B981,#059669)",
-      path: "/dsa",
+      path: "/dsa"
     },
 
     {
@@ -128,7 +86,7 @@ export default function Dashboard() {
       value: certifications.length,
       icon: <EmojiEventsIcon sx={{ fontSize: 48 }} />,
       color: "linear-gradient(135deg,#8B5CF6,#6D28D9)",
-      path: "/certifications",
+      path: "/certifications"
     },
 
     {
@@ -136,29 +94,10 @@ export default function Dashboard() {
       value: interviews.length,
       icon: <WorkIcon sx={{ fontSize: 48 }} />,
       color: "linear-gradient(135deg,#F97316,#EA580C)",
-      path: "/interviews",
-    },
+      path: "/interviews"
+    }
 
   ];
-
-  if (loading) {
-
-    return (
-
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="70vh"
-      >
-
-        <CircularProgress size={70} />
-
-      </Box>
-
-    );
-
-  }
 
   return (
 
@@ -182,85 +121,107 @@ export default function Dashboard() {
 
       <Grid container spacing={3}>
 
-        {cards.map((card, index) => (
+        {
 
-          <Grid item xs={12} sm={6} lg={3} key={index}>
+          cards.map((card, index) => (
 
-            <motion.div
-
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * .15 }}
-              whileHover={{ scale: 1.05, y: -8 }}
-
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              lg={3}
+              key={index}
             >
 
-              <Paper
+              <motion.div
 
-                elevation={8}
-                onClick={() => navigate(card.path)}
+                initial={{
+                  opacity: 0,
+                  y: 40
+                }}
 
-                sx={{
+                animate={{
+                  opacity: 1,
+                  y: 0
+                }}
 
-                  p: 3,
-                  borderRadius: 5,
-                  cursor: "pointer",
-                  color: "white",
-                  background: card.color,
-                  transition: ".4s",
+                transition={{
+                  delay: index * .15
+                }}
 
-                  "&:hover": {
-
-                    boxShadow:
-                      "0px 20px 40px rgba(0,0,0,.25)"
-
-                  }
-
+                whileHover={{
+                  scale: 1.05,
+                  y: -8
                 }}
 
               >
 
-                <Box
+                <Paper
 
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
+                  elevation={8}
+
+                  onClick={() => navigate(card.path)}
+
+                  sx={{
+
+                    p: 3,
+
+                    borderRadius: 5,
+
+                    cursor: "pointer",
+
+                    color: "white",
+
+                    background: card.color,
+
+                    transition: ".4s",
+
+                    "&:hover": {
+
+                      boxShadow:
+                        "0px 20px 40px rgba(0,0,0,.25)"
+
+                    }
+
+                  }}
 
                 >
 
-                  {card.icon}
-
-                  <Typography
-                    variant="h3"
-                    fontWeight="bold"
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
                   >
 
-                    <CountUp
-                      end={card.value}
-                      duration={1.5}
-                    />
-
-                  </Typography>
-
-                </Box>
-
-                <Typography
-                  variant="h6"
-                  mt={3}
-                  fontWeight="bold"
-                >
-
-                  {card.title}
+                    {card.icon}
+                  <Typography
+                      variant="h3"
+                      fontWeight="bold"
+                    >
+                    {card.value}
+                   
 
                 </Typography>
 
-              </Paper>
+                  </Box>
 
-            </motion.div>
+                  <Typography
+                    variant="h6"
+                    mt={3}
+                    fontWeight="bold"
+                  >
+                    {card.title}
+                  </Typography>
 
-          </Grid>
+                </Paper>
 
-        ))}
+              </motion.div>
+
+            </Grid>
+
+          ))
+
+        }
 
       </Grid>
             <Paper
@@ -269,46 +230,38 @@ export default function Dashboard() {
           mt: 5,
           p: 4,
           borderRadius: 5,
-          bgcolor: "background.paper",
+          bgcolor: "background.paper"
         }}
       >
 
         <Typography
           variant="h5"
           fontWeight="bold"
-          mb={1}
-        >
-          🚀 Placement Readiness ({readiness}%)
-        </Typography>
-
-        <Typography
-          color="text.secondary"
           mb={3}
         >
-          Keep improving your profile by adding Projects, DSA, Certifications,
-          Interviews and Study Logs.
+          🚀 Placement Readiness
         </Typography>
 
         <Grid container spacing={2}>
 
           <Grid item xs={12} md={6}>
 
-            <Typography sx={{ mb: 1 }}>
-              📁 Projects :
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              📁 Projects Completed :
               <strong> {projects.length}</strong>
             </Typography>
 
-            <Typography sx={{ mb: 1 }}>
-              💻 DSA Solved :
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              💻 DSA Problems Solved :
               <strong> {dsa.length}</strong>
             </Typography>
 
-            <Typography sx={{ mb: 1 }}>
-              💼 Interviews :
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              💼 Interviews Prepared :
               <strong> {interviews.length}</strong>
             </Typography>
 
-            <Typography sx={{ mb: 1 }}>
+            <Typography variant="body1">
               🏆 Certifications :
               <strong> {certifications.length}</strong>
             </Typography>
@@ -317,27 +270,29 @@ export default function Dashboard() {
 
           <Grid item xs={12} md={6}>
 
-            <Typography sx={{ mb: 1 }}>
+            <Typography variant="body1" sx={{ mb: 1 }}>
               📖 Study Logs :
               <strong> {studyLogs.length}</strong>
             </Typography>
 
-            <Typography sx={{ mb: 1 }}>
+            <Typography variant="body1" sx={{ mb: 1 }}>
               🤖 AI Assistant :
               <strong> Ready</strong>
             </Typography>
 
-            <Typography sx={{ mb: 1 }}>
-              📊 Total Records :
-              <strong> {totalRecords}</strong>
+            <Typography variant="body1" sx={{ mb: 1 }}>
+              🌙 Theme :
+              <strong> Dynamic</strong>
             </Typography>
 
             <Typography
+              variant="body2"
               color="text.secondary"
-              mt={2}
+              sx={{ mt: 2 }}
             >
-              Current Placement Readiness Score :
-              <strong> {readiness}%</strong>
+              Keep updating your projects, DSA questions,
+              interviews and certifications to improve your
+              placement readiness.
             </Typography>
 
           </Grid>
@@ -352,7 +307,7 @@ export default function Dashboard() {
           mt: 4,
           p: 4,
           borderRadius: 5,
-          bgcolor: "background.paper",
+          bgcolor: "background.paper"
         }}
       >
 
@@ -365,31 +320,28 @@ export default function Dashboard() {
         </Typography>
 
         <Typography color="text.secondary">
+
           Total Records :
-          <strong> {totalRecords}</strong>
+          <strong>
+            {" "}
+            {projects.length +
+              dsa.length +
+              interviews.length +
+              certifications.length +
+              studyLogs.length}
+          </strong>
+
         </Typography>
 
         <Typography
           color="text.secondary"
           mt={2}
         >
-          Click any dashboard card to manage that module.
-          Every change you make is automatically reflected here.
+          Click on any dashboard card above to manage that
+          section.
         </Typography>
 
       </Paper>
-
-      <Box mt={5}>
-
-        <ProgressCharts
-          projects={projects.length}
-          dsa={dsa.length}
-          interviews={interviews.length}
-          certifications={certifications.length}
-          studyLogs={studyLogs.length}
-        />
-
-      </Box>
 
     </Box>
 
