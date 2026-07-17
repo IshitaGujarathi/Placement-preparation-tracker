@@ -45,37 +45,35 @@ export default function Dashboard() {
 
   }, []);
 
-  const loadDashboard = async () => {
+ const loadDashboard = async () => {
+  console.log("Loading dashboard...");
+  try {
+    const [
+      projectRes,
+      dsaRes,
+      interviewRes,
+      certificationRes,
+      studyLogRes,
+    ] = await Promise.all([
+      projectService.getAll(),
+      dsaService.getAll(),
+      interviewService.getAll(),
+      certificationService.getAll(),
+      studyLogService.getAll(),
+    ]);
 
-    try {
+    console.log("Projects:", projectRes.data);
+    console.log("DSA:", dsaRes.data);
 
-      const [
-        projectRes,
-        dsaRes,
-        interviewRes,
-        certificationRes,
-        studyLogRes,
-      ] = await Promise.all([
-        projectService.getAll(),
-        dsaService.getAll(),
-        interviewService.getAll(),
-        certificationService.getAll(),
-        studyLogService.getAll(),
-      ]);
-
-      setProjects(projectRes.data || []);
-      setDsa(dsaRes.data || []);
-      setInterviews(interviewRes.data || []);
-      setCertifications(certificationRes.data || []);
-      setStudyLogs(studyLogRes.data || []);
-
-    } catch (error) {
-
-      console.error(error);
-
-    }
-
-  };
+    setProjects(projectRes.data || []);
+    setDsa(dsaRes.data || []);
+    setInterviews(interviewRes.data || []);
+    setCertifications(certificationRes.data || []);
+    setStudyLogs(studyLogRes.data || []);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   const totalRecords =
     projects.length +
