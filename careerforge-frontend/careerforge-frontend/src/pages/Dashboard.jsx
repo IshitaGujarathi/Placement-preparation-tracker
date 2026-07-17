@@ -10,8 +10,8 @@ import CodeIcon from "@mui/icons-material/Code";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import WorkIcon from "@mui/icons-material/Work";
 
-import CountUp from "react-countup";
-import { motion } from "framer-motion";
+// import CountUp from "react-countup";
+// import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -161,7 +161,7 @@ export default function Dashboard() {
             key={index}
           >
 
-            <motion.div
+            <div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.15 }}
@@ -198,10 +198,7 @@ export default function Dashboard() {
                     fontWeight="bold"
                   >
 
-                    <CountUp
-                      end={card.value}
-                      duration={1.2}
-                    />
+                    {card.value}
 
                   </Typography>
 
@@ -217,7 +214,7 @@ export default function Dashboard() {
 
               </Paper>
 
-            </motion.div>
+            </div>
 
           </Grid>
 
