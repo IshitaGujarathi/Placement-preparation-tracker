@@ -52,31 +52,50 @@ const loadDashboard = async () => {
     console.log("Loading dashboard...");
 
     const projectRes = await projectService.getAll();
-    console.log("Projects:", projectRes.data);
-    setProjects(projectRes.data || []);
+    console.log("Projects:", projectRes);
 
     const dsaRes = await dsaService.getAll();
-    console.log("DSA:", dsaRes.data);
-    setDsa(dsaRes.data || []);
+    console.log("DSA:", dsaRes);
 
     const interviewRes = await interviewService.getAll();
-    console.log("Interviews:", interviewRes.data);
-    setInterviews(interviewRes.data || []);
+    console.log("Interviews:", interviewRes);
 
     const certificationRes = await certificationService.getAll();
-    console.log("Certifications:", certificationRes.data);
-    setCertifications(certificationRes.data || []);
+    console.log("Certificates:", certificationRes);
 
     const studyLogRes = await studyLogService.getAll();
-    console.log("StudyLogs:", studyLogRes.data);
-    setStudyLogs(studyLogRes.data || []);
+    console.log("Study Logs:", studyLogRes);
 
+    setProjects(projectRes.data || []);
+    setDsa(dsaRes.data || []);
+    setInterviews(interviewRes.data || []);
+    setCertifications(certificationRes.data || []);
+    setStudyLogs(studyLogRes.data || []);
   } catch (err) {
     console.error("Dashboard Error:", err);
-  } finally {
-    setLoading(false);
   }
 };
+
+  const totalRecords =
+    projects.length +
+    dsa.length +
+    interviews.length +
+    certifications.length +
+    studyLogs.length;
+
+  const readiness = Math.min(
+    100,
+    Math.round(
+      (
+        projects.length * 20 +
+        dsa.length * 2 +
+        certifications.length * 10 +
+        interviews.length * 15 +
+        studyLogs.length
+      ) / 5
+    )
+  );
+
   const cards = [
     {
       title: "Projects",
